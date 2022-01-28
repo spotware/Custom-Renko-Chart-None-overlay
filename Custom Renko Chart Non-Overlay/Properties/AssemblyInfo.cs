@@ -2,10 +2,10 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("Custom Renko Chart None-overlay")]
+[assembly: AssemblyTitle("Custom Renko Chart Non-Overlay")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyProduct("Custom Renko Chart None-overlay")]
+[assembly: AssemblyProduct("Custom Renko Chart Non-Overlay")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

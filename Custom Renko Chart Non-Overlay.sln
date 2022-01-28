@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Custom Renko Chart None-overlay", "Custom Renko Chart None-overlay\Custom Renko Chart None-overlay.csproj", "{D24858FC-429C-41CF-87E1-C8191161BEC9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Custom Renko Chart Non-Overlay", "Custom Renko Chart Non-Overlay\Custom Renko Chart Non-Overlay.csproj", "{D24858FC-429C-41CF-87E1-C8191161BEC9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
