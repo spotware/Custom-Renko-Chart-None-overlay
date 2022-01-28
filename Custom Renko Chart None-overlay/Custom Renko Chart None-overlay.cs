@@ -156,7 +156,7 @@ namespace cAlgo
 
             UpdateLastBar(time, index);
 
-            FillOutputs(index, _lastBar);
+            FillOutputs(index, _lastBar, _previousBar);
 
             Close[index] = decimal.ToDouble(_lastBar.Close);
 
@@ -183,26 +183,28 @@ namespace cAlgo
 
         #region Other methods
 
-        private void FillOutputs(int index, CustomOhlcBar bar)
+        private void FillOutputs(int index, CustomOhlcBar lastBar, CustomOhlcBar previousBar)
         {
             if (IsOpenOutputEnabled)
             {
-                Open[index] = decimal.ToDouble(bar.Open);
+                var open = previousBar == null || previousBar.Type == lastBar.Type ? lastBar.Open : previousBar.Open;
+
+                Open[index] = decimal.ToDouble(open);
             }
 
             if (IsHighOutputEnabled)
             {
-                High[index] = bar.High;
+                High[index] = lastBar.High;
             }
 
             if (IsLowOutputEnabled)
             {
-                Low[index] = bar.Low;
+                Low[index] = lastBar.Low;
             }
 
             if (IsCloseOutputEnabled)
             {
-                Close[index] = decimal.ToDouble(bar.Close);
+                Close[index] = decimal.ToDouble(lastBar.Close);
             }
         }
 
