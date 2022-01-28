@@ -66,6 +66,18 @@ namespace cAlgo
         [Parameter("Line Style", DefaultValue = LineStyle.Solid, Group = "Wicks")]
         public LineStyle WicksLineStyle { get; set; }
 
+        [Parameter("Open", DefaultValue = true, Group = "OHLC Outputs")]
+        public bool IsOpenOutputEnabled { get; set; }
+
+        [Parameter("High", DefaultValue = true, Group = "OHLC Outputs")]
+        public bool IsHighOutputEnabled { get; set; }
+
+        [Parameter("Low", DefaultValue = true, Group = "OHLC Outputs")]
+        public bool IsLowOutputEnabled { get; set; }
+
+        [Parameter("Close", DefaultValue = true, Group = "OHLC Outputs")]
+        public bool IsCloseOutputEnabled { get; set; }
+
         #endregion Parameters
 
         #region Other properties
@@ -80,8 +92,21 @@ namespace cAlgo
 
         #endregion Other properties
 
+        #region Outputs
+
+        [Output("Open", LineColor = "Transparent", PlotType = PlotType.Line)]
+        public IndicatorDataSeries Open { get; set; }
+
+        [Output("High", LineColor = "Transparent", PlotType = PlotType.Line)]
+        public IndicatorDataSeries High { get; set; }
+
+        [Output("Low", LineColor = "Transparent", PlotType = PlotType.Line)]
+        public IndicatorDataSeries Low { get; set; }
+
         [Output("Close", LineColor = "Transparent", PlotType = PlotType.Line)]
         public IndicatorDataSeries Close { get; set; }
+
+        #endregion Outputs
 
         #region Overridden methods
 
@@ -131,6 +156,8 @@ namespace cAlgo
 
             UpdateLastBar(time, index);
 
+            FillOutputs(index, _lastBar);
+
             Close[index] = decimal.ToDouble(_lastBar.Close);
 
             var bodyRange = Math.Round(_lastBar.BodyRange, Symbol.Digits, MidpointRounding.AwayFromZero);
@@ -155,6 +182,29 @@ namespace cAlgo
         #endregion Overridden methods
 
         #region Other methods
+
+        private void FillOutputs(int index, CustomOhlcBar bar)
+        {
+            if (IsOpenOutputEnabled)
+            {
+                Open[index] = decimal.ToDouble(bar.Open);
+            }
+
+            if (IsHighOutputEnabled)
+            {
+                High[index] = bar.High;
+            }
+
+            if (IsLowOutputEnabled)
+            {
+                Low[index] = bar.Low;
+            }
+
+            if (IsCloseOutputEnabled)
+            {
+                Close[index] = decimal.ToDouble(bar.Close);
+            }
+        }
 
         private Color GetColor(string colorString, int alpha = 255)
         {
