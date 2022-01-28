@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 namespace cAlgo
 {
-    [Indicator(IsOverlay = true, TimeZone = TimeZones.UTC, AccessRights = AccessRights.None)]
+    [Indicator(IsOverlay = false, TimeZone = TimeZones.UTC, AccessRights = AccessRights.None)]
     public class CustomRenkoChart : Indicator
     {
         #region Fields
 
-        private const string Name = "Custom Renko Chart";
+        private const string Name = "Custom Renko Chart None-overlay";
 
         private readonly List<string> _objectNames = new List<string>();
 
@@ -80,6 +80,9 @@ namespace cAlgo
 
         #endregion Other properties
 
+        [Output("Close", LineColor = "Transparent", PlotType = PlotType.Line)]
+        public IndicatorDataSeries Close { get; set; }
+
         #region Overridden methods
 
         protected override void Initialize()
@@ -94,7 +97,7 @@ namespace cAlgo
 
                 var error = "Custom Renko Chart Error: Current chart is not a Renko chart, please switch to a Renko chart";
 
-                Chart.DrawStaticText(name, error, VerticalAlignment.Center, HorizontalAlignment.Center, Color.Red);
+                Area.DrawStaticText(name, error, VerticalAlignment.Center, HorizontalAlignment.Center, Color.Red);
 
                 return;
             }
@@ -127,6 +130,8 @@ namespace cAlgo
             }
 
             UpdateLastBar(time, index);
+
+            Close[index] = decimal.ToDouble(_lastBar.Close);
 
             var bodyRange = Math.Round(_lastBar.BodyRange, Symbol.Digits, MidpointRounding.AwayFromZero);
 
