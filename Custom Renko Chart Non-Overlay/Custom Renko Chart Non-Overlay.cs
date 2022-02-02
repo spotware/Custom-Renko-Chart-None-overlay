@@ -12,6 +12,8 @@ namespace cAlgo
 
         private const string Name = "Custom Renko Chart Non-Overlay";
 
+        private const string TimeFrameNamePrefix = "Renko";
+
         private string _chartObjectNamesSuffix;
 
         private CustomOhlcBar _lastBar, _previousBar;
@@ -127,7 +129,7 @@ namespace cAlgo
 
                 return;
             }
-            else if (Convert.ToInt32(timeFrameName.Substring(5), CultureInfo.InvariantCulture) > SizeInPips)
+            else if (Convert.ToInt32(timeFrameName.Substring(TimeFrameNamePrefix.Length), CultureInfo.InvariantCulture) > SizeInPips)
             {
                 var name = string.Format("Error_{0}", _chartObjectNamesSuffix);
 
@@ -141,7 +143,7 @@ namespace cAlgo
             {
                 return;
             }
-            else if (SizeInPips % Convert.ToInt32(timeFrameName.Substring(5), CultureInfo.InvariantCulture) == 0)
+            else if (SizeInPips % Convert.ToInt32(timeFrameName.Substring(TimeFrameNamePrefix.Length), CultureInfo.InvariantCulture) == 0)
             {
                 _bars = Bars;
             }
@@ -290,11 +292,6 @@ namespace cAlgo
                     _lastBar.Open = _previousBar.Type == _lastBar.Type ? _previousBar.Close : _previousBar.Open;
                 }
 
-                if (_lastBar.BodyRange > _sizeInPips)
-                {
-                    Chart.DrawVerticalLine(index.ToString(), time, Color.Red);
-                }
-
                 DrawBar(_lastBar, _previousBar);
             }
 
@@ -316,7 +313,6 @@ namespace cAlgo
             _lastBar.Close = (decimal)_bars.ClosePrices[index];
             _lastBar.High = Maximum(_bars.HighPrices, startIndex, index);
             _lastBar.Low = Minimum(_bars.LowPrices, startIndex, index);
-            _lastBar.Volume = Sum(_bars.TickVolumes, startIndex, index);
             _lastBar.EndTime = time;
             _lastBar.EndIndex = index;
         }
@@ -333,7 +329,7 @@ namespace cAlgo
             return max;
         }
 
-        static double Minimum(DataSeries dataSeries, int startIndex, int endIndex)
+        private double Minimum(DataSeries dataSeries, int startIndex, int endIndex)
         {
             var min = double.PositiveInfinity;
 
@@ -343,18 +339,6 @@ namespace cAlgo
             }
 
             return min;
-        }
-
-        private double Sum(DataSeries dataSeries, int startIndex, int endIndex)
-        {
-            double sum = 0;
-
-            for (var iIndex = startIndex; iIndex <= endIndex; iIndex++)
-            {
-                sum += dataSeries[iIndex];
-            }
-
-            return sum;
         }
 
         private TimeFrame GetTimeFrame(int sizeInPips, string type)
@@ -423,8 +407,6 @@ namespace cAlgo
 
         public decimal Close { get; set; }
 
-        public double Volume { get; set; }
-
         public BarType Type
         {
             get
@@ -441,14 +423,6 @@ namespace cAlgo
                 {
                     return BarType.Neutral;
                 }
-            }
-        }
-
-        public double Range
-        {
-            get
-            {
-                return High - Low;
             }
         }
 
